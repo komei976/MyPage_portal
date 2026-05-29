@@ -292,41 +292,38 @@
 </head>
 <body>
 
-    <header>
+   <header>
         <div class="header-container">
             <h1>就活マイページポータル</h1>
             
-            <!-- Setup details container -->
-            <details class="setup-panel" id="setup-details">
-                <summary>⚙️ スプレッドシート連携設定の方法</summary>
-                <div class="setup-content">
-                    <p>1. Googleスプレッドシートを作成し、1行目を以下のように設定します：<br>
-                       <strong>A1: 頭文字, B1: 企業名, C1: マイページURL, D1: 企業ロゴURL</strong></p>
-                    <p style="margin-top:6px;">2. スプレッドシートの「ファイル」＞「共有」＞「ウェブに公開」を選択し、形式を<strong>「カンマ区切り値 (.csv)」</strong>にして公開します。</p>
-                    <p style="margin-top:6px;">3. 生成された公開URLを下の欄に貼り付けてください（自動保存されます）。</p>
-                    <input type="text" id="csv-url-input" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv">
-                    <div class="status-bar" id="load-status">現在はサンプルデータを表示中</div>
-                </div>
-            </details>
-
             <div class="controls">
-                <!-- Search Box -->
                 <div class="search-box">
                     <span class="search-icon">🔍</span>
                     <input type="text" id="search-input" placeholder="企業名や頭文字で検索...">
                 </div>
 
-                <!-- Alphabet Index Buttons -->
                 <div class="alphabet-nav" id="alphabet-nav">
-                    <!-- Dynamic Generated -->
-                </div>
+                    </div>
             </div>
         </div>
     </header>
 
+    <div style="max-width: 800px; margin: 16px auto 0; padding: 0 16px;">
+        <details class="setup-panel" id="setup-details">
+            <summary>⚙️ スプレッドシート連携設定</summary>
+            <div class="setup-content">
+                <p>1. Googleスプレッドシートを作成し、1行目を以下のように設定します：<br>
+                   <strong>A1: 頭文字, B1: 企業名, C1: マイページURL, D1: 企業ロゴURL</strong></p>
+                <p style="margin-top:6px;">2. スプレッドシートの「ファイル」＞「共有」＞「ウェブに公開」を選択し、形式を<strong>「カンマ区切り値 (.csv)」</strong>にして公開します。</p>
+                <p style="margin-top:6px;">3. 生成された公開URLを下の欄に貼り付けてください（自動保存されます）。</p>
+                <input type="text" id="csv-url-input" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv">
+                <div class="status-bar" id="load-status">現在はサンプルデータを表示中</div>
+            </div>
+        </details>
+    </div>
+
     <main id="main-content">
-        <!-- Dynamic Generated Content -->
-    </main>
+        </main>
 
     <script>
         // Default Mock Data
@@ -381,7 +378,6 @@
         async function fetchCSVData(url) {
             loadStatus.innerText = "同期中...";
             try {
-                // Handle direct sheets links converted to export if needed
                 let targetUrl = url;
                 if(url.includes("docs.google.com/spreadsheets") && !url.includes("output=csv")) {
                     loadStatus.innerText = "⚠️ ウェブに公開の「CSV形式」のURLを入力してください";
@@ -394,10 +390,16 @@
                 
                 companyData = parseCSV(csvText);
                 loadStatus.innerText = `同期完了: ${companyData.length} 件の企業データ`;
+                
+                // 🌟 追加：データ読み込み成功時に設定パネルを自動で閉じる
+                setupDetails.open = false; 
+
                 renderDashboard(companyData);
             } catch (error) {
                 console.error(error);
                 loadStatus.innerText = "❌ データの読み込みに失敗しました。URLを確認してください。";
+                // エラー時はパネルを開いたままにする
+                setupDetails.open = true;
             }
         }
 
